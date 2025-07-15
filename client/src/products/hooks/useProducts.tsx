@@ -22,7 +22,7 @@ export const useProducts = ({ filterKey }: Options) => {
     isLoading,
     isError,
     error,
-    data: products,
+    products,
     isFetching,
   };
 };

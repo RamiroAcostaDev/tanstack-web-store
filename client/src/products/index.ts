@@ -10,3 +10,6 @@ export { NewProduct } from "./pages/NewProduct";
 export { WomensPage } from "./pages/WomensPage";
 export { useProducts } from "./hooks/useProducts";
 export * as productActions from "./services/actions";
+
+export { ProductById } from "./pages/ProductById";
+export { useProduct } from "./hooks/useProduct";

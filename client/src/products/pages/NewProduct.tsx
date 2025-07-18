@@ -1,5 +1,7 @@
 import { Button, Image, Input, Textarea } from "@nextui-org/react";
+
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useProductMutation } from "..";
 
 interface FormInputs {
   title: string;
@@ -10,10 +12,25 @@ interface FormInputs {
 }
 
 export const NewProduct = () => {
-  const { control, handleSubmit } = useForm<FormInputs>();
+  const productMutation = useProductMutation();
+  // const productMutation = useMutation({
+  //   mutationFn: productActions.createProduct,
+  // });
 
+  const { control, handleSubmit, watch } = useForm<FormInputs>({
+    defaultValues: {
+      title: "",
+      price: 0,
+      description: "",
+      category: "men's clothing",
+      image: "",
+    },
+  });
+
+  const newImage = watch("image");
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
     console.log(data);
+    productMutation.mutate(data);
   };
 
   return (
@@ -45,7 +62,7 @@ export const NewProduct = () => {
               render={({ field }) => (
                 <Input
                   value={field.value?.toString()}
-                  onChange={field.onChange}
+                  onChange={(ev) => field.onChange(+ev.target.value)}
                   className="mt-2"
                   type="number"
                   label="Precio del producto"
@@ -101,8 +118,13 @@ export const NewProduct = () => {
             />
 
             <br />
-            <Button type="submit" className="mt-2" color="primary">
-              Crear
+            <Button
+              type="submit"
+              className="mt-2"
+              color={productMutation.isPending ? "warning" : "primary"}
+              isDisabled={productMutation.isPending}
+            >
+              {productMutation.isPending ? "Cargando..." : "Crear producto"}
             </Button>
           </div>
 
@@ -113,7 +135,7 @@ export const NewProduct = () => {
               height: "600px",
             }}
           >
-            <Image src="https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg" />
+            <Image src={newImage} />
           </div>
         </div>
       </form>

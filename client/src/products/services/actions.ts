@@ -1,10 +1,11 @@
-import { productsApi, type Product } from "..";
+import { productsApi, type Product, type ProductLike } from "..";
 
 interface getProductsOptions {
   filterKey?: string;
 }
 
-const sleep = (seconds: number): Promise<boolean> => {
+//simula la demora en la respuesta de la api
+export const sleep = (seconds: number): Promise<boolean> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(true);
@@ -15,7 +16,7 @@ const sleep = (seconds: number): Promise<boolean> => {
 export const getProducts = async ({
   filterKey,
 }: getProductsOptions): Promise<Product[]> => {
-  await sleep(2);
+  // await sleep(2);
 
   const filterURL = filterKey ? `category=${filterKey}` : "";
   const { data } = await productsApi.get<Product[]>(`/products?${filterURL}`);
@@ -23,8 +24,15 @@ export const getProducts = async ({
 };
 
 export const getProductById = async (id: number): Promise<Product> => {
-  await sleep(2);
+  // await sleep(2);
 
   const { data } = await productsApi.get<Product>(`/products/${id}`);
+  return data;
+};
+
+export const createProduct = async (product: ProductLike) => {
+  // await sleep(2);
+
+  const { data } = await productsApi.post<Product>(`/products`, product);
   return data;
 };
